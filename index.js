@@ -46,10 +46,7 @@ app.get("/api/notes/:id", (request, response) => {
       }
     })
 
-    .catch((error) => {
-      console.log(error);
-      response.status(500).end();
-    });
+    .catch((error) => next(error));
 });
 app.delete("/api/notes/:id", (request, response, next) => {
   Note.findByIdAndDelete(request.params.id)
@@ -58,6 +55,7 @@ app.delete("/api/notes/:id", (request, response, next) => {
     })
     .catch((error) => next(error));
 });
+
 const generateId = () => {
   const maxId =
     notes.length > 0 ? Math.max(...notes.map((n) => Number(n.id))) : 0;
@@ -76,9 +74,12 @@ app.post("/api/notes", (request, response) => {
     important: body.important || false,
   });
 
-  note.save().then((savedNote) => {
-    response.json(savedNote);
-  });
+  note
+    .save()
+    .then((savedNote) => {
+      response.json(savedNote);
+    })
+    .catch((error) => next(error));
 });
 
 app.put("/api/notes/:id", (request, response, next) => {
@@ -95,6 +96,21 @@ app.put("/api/notes/:id", (request, response, next) => {
     })
     .catch((error) => next(error));
 });
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message);
+
+  if (error.name === "CastError" && error.kind === "ObjectId") {
+    return response.status(400).json({ error: "malformatted id" });
+  } else if (error.name === "ValidationError") {
+    return response.status(400).json({ error: error.message });
+  }
+
+  next(error);
+};
+
+app.use(errorHandler);
+
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
