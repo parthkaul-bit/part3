@@ -1,0 +1,10 @@
+GET http://localhost:3001/api/notes/
+###
+POST http://localhost:8080/api/users/ HTTP/1.1
+content-type: application/json
+
+{
+  "username": "mluukkai",
+  "name": "Matti Luukkainen",
+  "password": "salainen"
+}

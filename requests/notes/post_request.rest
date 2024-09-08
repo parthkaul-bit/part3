@@ -1,0 +1,22 @@
+GET http://localhost:3001/api/notes/
+
+###
+POST http://localhost:3001/api/notes/ HTTP/1.1
+content-type: application/json
+
+{
+    "content": "sample",
+    "important": false,
+    "userId": "66dc59cfd8dbfd90418c27a2"
+}
+
+###
+POST http://localhost:8080/api/notes/ HTTP/1.1
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1sdXVra2FpIiwiaWQiOiI2NmRjNTljZmQ4ZGJmZDkwNDE4YzI3YTIiLCJpYXQiOjE3MjU3NjU0MDZ9.uEz5fmxP9u3A_8Znk-0eM0WU2VCmjs1WfU83Bi5SZss
+
+{
+    "content": "sample",
+    "important": false,
+    "userId": "66dc59cfd8dbfd90418c27a2"
+}
